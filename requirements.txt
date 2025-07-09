@@ -11,3 +11,4 @@ python-dotenv
 openai
 django-cors-headers
 python-decouple
+gunicorn
