@@ -7,7 +7,7 @@ from deep_translator import GoogleTranslator
 from langdetect import detect
 from decouple import config
 
-# ✅ Hugging Face setup
+# Hugging Face setup
 HF_TOKEN = config("HF_TOKEN")
 HF_API_URL = "https://api-inference.huggingface.co/models/intfloat/multilingual-e5-large"
 
@@ -15,7 +15,7 @@ headers = {
     "Authorization": f"Bearer {HF_TOKEN}"
 }
 
-# ✅ Define embedding function FIRST
+# Define embedding function FIRST
 def get_embedding(text):
     prompt = f"query: {text}"  # Required for BGE and E5 models
     payload = {
@@ -31,12 +31,12 @@ def get_embedding(text):
         return None
 
 
-# ✅ Load NGO data
+# Load NGO data
 json_path = os.path.join(settings.BASE_DIR, 'matcher', 'women_business_ngos_50.json')
 with open(json_path, "r", encoding="utf-8") as f:
     ngos = json.load(f)
 
-# ✅ Try cached embeddings
+# Try cached embeddings
 embedding_cache_path = os.path.join(settings.BASE_DIR, 'matcher', 'cached_ngo_embeddings.json')
 
 if os.path.exists(embedding_cache_path):
@@ -58,7 +58,7 @@ else:
     with open(embedding_cache_path, "w", encoding="utf-8") as f:
         json.dump(ngo_vecs, f)
 
-# ✅ Matching function
+# Matching function
 def match_ngo(user_input, top_k=5):
     try:
         lang = detect(user_input)
