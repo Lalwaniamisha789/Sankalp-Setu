@@ -11,7 +11,7 @@ DEBUG = config("DEBUG", cast=bool)
 OPENAI_API_KEY = config("OPENAI_API_KEY")
 GEMINI_API_KEY = config("GEMINI_API_KEY", default="")  # Optional
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv)
+ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 
 # Auth
 LOGIN_REDIRECT_URL = '/'
