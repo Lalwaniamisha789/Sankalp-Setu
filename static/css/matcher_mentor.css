@@ -1,0 +1,130 @@
+body.dark-bg {
+    background: #181820;
+    color: #fff;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #181820;
+    padding: 18px 40px 18px 24px;
+    border-bottom: 1px solid #2d2d3a;
+}
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+.icon {
+    font-size: 1.7rem;
+    margin-right: 8px;
+}
+.brand .highlight {
+    color: #b266ff;
+}
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 24px;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+nav a:hover {
+    color: #b266ff;
+}
+.main-title {
+    text-align: center;
+    color: #b266ff;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+.sub-title {
+    color: #b266ff;
+    margin-left: 16px;
+    margin-top: 32px;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+.search-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto 32px auto;
+    max-width: 700px;
+    background: #232336;
+    border-radius: 16px;
+    padding: 32px 24px 24px 24px;
+    box-shadow: 0 2px 16px #0002;
+}
+.search-box {
+    width: 100%;
+    min-width: 320px;
+    max-width: 600px;
+    font-size: 1.1rem;
+    padding: 18px;
+    border-radius: 8px;
+    border: none;
+    background: #232336;
+    color: #fff;
+    margin-bottom: 24px;
+    resize: none;
+    box-shadow: 0 1px 4px #0001;
+}
+.find-btn {
+    background: #b266ff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 8px;
+}
+.find-btn:hover {
+    background: #8e44ec;
+}
+.card, .mentor-card {
+    background: #232336;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #0002;
+    margin: 24px auto;
+    padding: 24px 28px;
+    max-width: 700px;
+    color: #fff;
+    font-size: 1.08rem;
+}
+.card-title {
+    color: #b266ff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.card-link a {
+    color: #b266ff;
+    text-decoration: underline;
+}
+.card-services, .card-desc, .card-score {
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+.mentor-card ul, .mentor-card ol {
+    margin: 8px 0 8px 24px;
+}
+.mentor-card li {
+    margin-bottom: 2px;
+}
+.desc {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 18px;
+    font-size: 1.1rem;
+} 

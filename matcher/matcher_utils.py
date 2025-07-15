@@ -38,18 +38,23 @@ def match_ngo(user_input, top_k=5):
     for sim, ngo in matches:
         try:
             translated_services = GoogleTranslator(source='en', target=lang).translate(ngo.get("services", ""))
+        except Exception as e:
+            print("Translation error (services):", e)
+            translated_services = ngo.get("services", "[Translation failed]")
+
+        try:
             translated_desc = GoogleTranslator(source='en', target=lang).translate(ngo.get("description", ""))
-        except:
-            translated_services = ngo.get("services", "")
-            translated_desc = ngo.get("description", "")
+        except Exception as e:
+            print("Translation error (desc):", e)
+            translated_desc = ngo.get("description", "[Translation failed]")
 
-        result.append(
-            f"{ngo['name']} ({ngo['location']})\n"
-            f"Website: {ngo.get('website', 'N/A')}\n"
-            f"Services: {translated_services}\n"
-            f"Description: {translated_desc}\n"
-            f"Similarity Score: {round(sim, 2)}"
-        )
-
+        result.append({
+            "name": ngo.get("name", "NGO"),
+            "location": ngo.get("location", ""),
+            "website": ngo.get("website", "N/A"),
+            "services": translated_services,
+            "description": translated_desc,
+            "similarity": float(round(sim, 2))
+        })
 
     return result

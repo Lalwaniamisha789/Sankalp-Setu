@@ -1,5 +1,4 @@
-.env
-# Virtual environment
+# Python virtual environments
 venv/
 env/
 
@@ -20,7 +19,6 @@ __pycache__/
 Thumbs.db
 
 # Environment variable files
-.env
 *.env
 
 # Logs
@@ -40,4 +38,7 @@ htmlcov/
 *.sqlite3
 *.db
 
+# Node modules
 node_modules/
+migrations/
+staticfiles/

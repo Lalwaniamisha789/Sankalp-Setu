@@ -1,49 +1,36 @@
-# mentor_utils.py
-
-from openai import OpenAI
-import os
+import google.generativeai as genai
 from decouple import config
-client = OpenAI(api_key=config("OPENAI_API_KEY"))
+
+# Configure Gemini with your API key
+genai.configure(api_key=config("GEMINI_API_KEY"))
+
+# ✅ Use a stable, supported model
+model = genai.GenerativeModel("models/gemini-1.5-flash-latest")
 
 def process_mentor_chat(user_input: str) -> str:
+    prompt = f"""
+You are a multilingual business mentor assistant. The user will type in their native language (Hindi, English, Tamil, etc.).
+
+Respond ONLY in the language used in the user's query.
+
+Instructions:
+1. Extract the following fields from the business idea:
+   - BUSINESS_TYPE, CAPITAL, LOCATION, TARGET, SECTOR, TIMELINE, EXPERIENCE
+
+2. Then provide:
+   - Feasibility score (out of 10) with reason
+   - Relevant Indian government scheme info
+   - A simple 5-step business plan
+   - Personalized voice-friendly advice
+
+Use the **same language as input** for the entire response.
+Structure the output using bullet points or headings clearly.
+
+User input: {user_input}
     """
-    Processes the user input using OpenAI GPT and returns a structured response.
 
-    Args:
-        user_input (str): The business idea input from the user.
-
-    Returns:
-        str: Formatted multilingual assistant response.
-    """
-    system_message = """
-You are a multilingual business assistant chatbot. For every user message:
-
-1. Detect the language.
-2. Respond ONLY in that same language.
-3. Extract and return the following fields:
-   - BUSINESS_TYPE
-   - CAPITAL
-   - LOCATION
-   - TARGET
-   - SECTOR
-   - TIMELINE
-   - EXPERIENCE
-
-4. Provide:
-   - A feasibility score out of 10 with reasons.
-   - Government scheme matching (Indian context): scheme name, eligibility, required papers, loan amount, and interest rate explanation.
-   - A business plan (5-step).
-   - Personalized advice, voice-friendly.
-
-Use bullet points and structured formatting in the same language as the input.
-"""
-
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": user_input}
-        ]
-    )
-
-    return response.choices[0].message.content.strip()
+    try:
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        return f"Gemini error: {str(e)}"

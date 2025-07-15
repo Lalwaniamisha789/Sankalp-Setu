@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="home-main" style="max-width: 960px; margin: 0 auto; text-align: center; padding: 60px 20px;">
+
+    <h1 style="font-size: 2.4rem; margin-bottom: 12px; color: #fff;">
+        Welcome{% if user.is_authenticated %}, {{ user.first_name|default:user.username }}{% endif %} to 
+        <span style="color:#b266ff;">Sankalp Setu</span>
+    </h1>
+
+    <p style="font-size: 1.1rem; color: #ccc; margin-bottom: 32px;">
+        Empowering women entrepreneurs and innovators across India.<br>
+        Use our AI-powered <b>Business Mentor</b> for guidance or find trusted <b>NGOs</b> to support your journey.
+    </p>
+
+    {% if user.is_authenticated %}
+        <div class="home-btns" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px;">
+            <a class="home-btn find-btn" href="/mentor/frontend/">Launch AI Mentor</a>
+            <a class="home-btn find-btn" href="/matcher/frontend/">Find Support NGOs</a>
+        </div>
+    {% else %}
+        <div class="home-btns" style="display: flex; justify-content: center; gap: 20px;">
+            <a class="home-btn find-btn" href="{% url 'login' %}">Login</a>
+            <a class="home-btn find-btn" href="{% url 'register' %}">Register</a>
+        </div>
+    {% endif %}
+
+    {% if matcher_history %}
+  <div style="margin-top: 50px; padding: 24px; background: #151522; border-radius: 12px; max-width: 900px; margin-left: auto; margin-right: auto;">
+    <h2 style="color: #a259ff; margin-bottom: 20px;">NGO Search History</h2>
+    <ul style="text-align:left; list-style-type: none; padding: 0;">
+    {% for item in matcher_history %}
+      <li style="background: #1e1e2f; color: #fff; padding: 12px 20px; border-radius: 8px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: bold;">{{ item.query }}</span>
+          <button class="toggle-results-btn" data-index="{{ forloop.counter0 }}" style="background: #a259ff; border: none; padding: 6px 12px; border-radius: 4px; color: white; cursor: pointer;">
+            Show Results
+          </button>
+        </div>
+        <div id="results-{{ forloop.counter0 }}" style="display: none; margin-top: 12px;"></div>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% if mentor_chats %}
+  <div style="margin-top: 50px; padding: 24px; background: #151522; border-radius: 12px; max-width: 900px; margin-left: auto; margin-right: auto;">
+    <h2 style="color: #a259ff; margin-bottom: 20px;">Mentor Chat History</h2>
+    <ul style="text-align:left; list-style-type: none; padding: 0;">
+      {% for chat in mentor_chats %}
+  <li style="background: #1e1e2f; color: #fff; padding: 12px 20px; border-radius: 8px; margin-bottom: 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div><b>Q:</b> {{ chat.message }}</div>
+      <button class="toggle-mentor-btn" data-index="{{ forloop.counter0 }}" style="background: #a259ff; border: none; padding: 6px 12px; border-radius: 4px; color: white; cursor: pointer;">
+        Show Answer
+      </button>
+    </div>
+    <div id="mentor-response-{{ forloop.counter0 }}" style="display: none; margin-top: 12px;"><b>A:</b> {{ chat.response|linebreaks }}</div>
+  </li>
+{% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+
+<script>
+  const historyData = {{ matcher_history|safe }};
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-results-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(btn.getAttribute('data-index'));
+        const container = document.getElementById('results-' + idx);
+        const results = historyData[idx] && historyData[idx].results ? historyData[idx].results : [];
+
+        if (container.style.display === 'none') {
+          if (container.innerHTML.trim() === '') {
+            let html = '';
+            if (results.length) {
+              html = results.map(function (r) {
+                return `
+                  <div style="background: #2a2a3d; padding: 12px; margin: 8px 0; border-radius: 6px; text-align: left;">
+                    <h4 style="color:#b266ff;">${r.name} <small style="color: #aaa;">(${r.location})</small></h4>
+                    <p><b>Services:</b> ${r.services}</p>
+                    <p><b>Description:</b> ${r.description}</p>
+                    <p><b>Similarity Score:</b> ${parseFloat(r.similarity).toFixed(2)}</p>
+                  </div>
+                `;
+              }).join('');
+            } else {
+              html = '<p style="color:#aaa;">No results found.</p>';
+            }
+            container.innerHTML = html;
+          }
+          container.style.display = 'block';
+          btn.textContent = 'Hide Results';
+        } else {
+          container.style.display = 'none';
+          btn.textContent = 'Show Results';
+        }
+      });
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".toggle-mentor-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const idx = btn.getAttribute("data-index");
+        const answerDiv = document.getElementById("mentor-response-" + idx);
+        const isVisible = answerDiv.style.display === "block";
+        answerDiv.style.display = isVisible ? "none" : "block";
+        btn.textContent = isVisible ? "Show Answer" : "Hide Answer";
+      });
+    });
+  });
+</script>
+
+{% endblock %}

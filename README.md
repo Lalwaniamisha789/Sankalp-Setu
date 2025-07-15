@@ -52,6 +52,9 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 ```
+### 4. Access the matcher and mentor frontends:
+   - Matcher: http://localhost:8000/matcher/frontend/
+   - Mentor: http://localhost:8000/mentor/frontend/
 
 ## Tech Stack 
 ### 1. LLMs: OpenAI ChatGPT API

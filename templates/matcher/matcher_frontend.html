@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="matcher-main">
+    <h1 class="main-title">Find Support NGOs</h1>
+    <h2 class="subtitle">Supports all major Indian languages like Hindi, Tamil, Bengali, Marathi and more</h2>
+
+    <section class="search-section">
+        <textarea id="matcher-query" class="search-box" rows="3" placeholder="Type in Hindi, Tamil, Marathi... e.g. मैं महिला उद्यमिता सीखना चाहती हूँ"></textarea>
+        <div class="action-buttons">
+            <button id="matcher-btn" class="find-btn">Find NGOs</button>
+        </div>
+    </section>
+
+    <div id="spinner" class="spinner hidden"></div>
+    <section id="matcher-results" class="results-section"></section>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById('matcher-btn');
+    const queryBox = document.getElementById('matcher-query');
+    const resultsDiv = document.getElementById('matcher-results');
+    const spinner = document.getElementById('spinner');
+    let originalResults = [];
+
+    btn.onclick = async function () {
+        const query = queryBox.value.trim();
+        if (!query) {
+            resultsDiv.innerHTML = '<div class="card">Please enter a query.</div>';
+            return;
+        }
+
+        spinner.classList.remove('hidden');
+        resultsDiv.innerHTML = '';
+
+        const resp = await fetch('/matcher/api/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({ query })
+        });
+
+        spinner.classList.add('hidden');
+
+        if (!resp.ok) {
+            resultsDiv.innerHTML = '<div class="card">Error fetching results.</div>';
+            return;
+        }
+
+        const data = await resp.json();
+        if (!data.results || !data.results.length) {
+            resultsDiv.innerHTML = '<div class="card">No matches found.</div>';
+            return;
+        }
+
+        originalResults = data.results;
+        renderResults(originalResults);
+    };
+
+    function renderResults(results) {
+        resultsDiv.innerHTML = results.map(r => `
+            <div class="card">
+                <h2 class="card-title">${r.name} <span class="location">(${r.location})</span> <span class="lang-badge">Auto-translated</span></h2>
+                <p class="card-link"><a href="${r.website || '#'}" target="_blank">${r.website || 'N/A'}</a></p>
+                <p class="card-services"><b>Services:</b> ${r.services}</p>
+                <p class="card-desc"><b>Description:</b> ${r.description}</p>
+                <p class="card-score"><b>Similarity Score:</b> ${r.similarity.toFixed(2)}</p>
+            </div>
+        `).join('');
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0f0f11;
+    color: #eee;
+}
+
+.matcher-main {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.main-title {
+    font-size: 2.3rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #f0f0f0;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #ccc;
+    margin-bottom: 24px;
+    font-weight: 400;
+}
+
+.search-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    background-color: #1a1a1d;
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.search-box {
+    width: 100%;
+    max-width: 700px;
+    padding: 14px 18px;
+    border: 1px solid #444;
+    border-radius: 10px;
+    font-size: 1rem;
+    resize: vertical;
+    background-color: #2a2a2d;
+    color: #fff;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.find-btn, .filter-select {
+    padding: 10px 16px;
+    font-size: 0.95em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.find-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.find-btn:hover {
+    background-color: #005bb5;
+}
+
+.filter-select {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    min-width: 160px;
+}
+
+.results-section {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.card {
+    background: #ffffff;
+    color: #111;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    /* 🔧 Add these: */
+    width: 100%;
+    max-width: 700px;
+    box-sizing: border-box;
+    align-self: center;
+}
+
+.card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.card-link a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.card-link a:hover {
+    text-decoration: underline;
+}
+
+.card-services, .card-desc, .card-score {
+    margin-top: 10px;
+    font-size: 0.95em;
+    line-height: 1.6em;
+}
+
+.location {
+    font-weight: 400;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.lang-badge {
+    background-color: #e0e0e0;
+    color: #333;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-left: 8px;
+}
+
+.spinner {
+    margin: 30px auto;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #0066cc;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+.spinner.hidden {
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+{% endblock %}

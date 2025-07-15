@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+.auth-container {
+    max-width: 480px;
+    margin: 60px auto;
+    padding: 40px 32px;
+    background-color: #1e1e2f;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: #eee;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.auth-container h2 {
+    font-size: 2rem;
+    color: #b266ff;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.auth-container label {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.auth-container input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background-color: #2c2c3f;
+    color: #fff;
+    width: 100%;
+}
+
+.auth-container .find-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    background-color: #a259ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.auth-container .find-btn:hover {
+    background-color: #933bff;
+}
+
+.auth-container p {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #bbb;
+}
+
+.auth-container a {
+    color: #a259ff;
+    text-decoration: none;
+}
+
+.auth-container a:hover {
+    text-decoration: underline;
+}
+
+.auth-container .errorlist {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-top: 6px;
+    margin-bottom: -6px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<div class="auth-container">
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small style="color:#aaa;">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <div class="errorlist">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="find-btn">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+</div>
+{% endblock %}
