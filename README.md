@@ -22,7 +22,7 @@ This Django-powered platform includes two smart, language-flexible tools:
 ## Screenshots
 
 ### Home Page
-![Home Page](images/home_page.png)
+![Home Page](images/homepage.png)
 
 ### AI Mentor (Input/Output in Hindi)
 ![AI Mentor Input](images/mentor_input.png)
