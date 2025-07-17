@@ -2,33 +2,37 @@
 
 ## Overview
 Sankalp‑Setu includes two AI‑powered modules integrated into a Django backend:
-1. **AI Mentor** – a multilingual ChatGPT‑based mentor.
-2. **NGO Matcher** – a cosine‑similarity–based NGO matchmaker.
+1. **AI Mentor** – a **Gemini-powered**, voice-enabled guide for NGO-related queries.  
+2. **NGO Matcher** – an intelligent NGO recommendation system using cosine similarity.
 
 Both modules support input/output in any language.
 
 ---
 
 ## Features
-- **Multilingual Input**: Detects user's language, processes via English GPT model, and returns answers in original language.
-- **AI Mentor**: Provides guidance, Q&A, and advice for NGO-related topics.
-- **NGO Matcher**: Matches user interests to NGO profiles using cosine similarity on TF‑IDF vectors.
-
+- **Multilingual Support**: Automatically detects the user's language, processes queries in English using AI, and returns results in the original language.
+- **AI Mentor (Gemini)**:
+  - Offers guidance, Q&A, and mentorship on NGO, volunteering, and social impact topics.
+  - Supports **voice input and output**, replying in the user’s native language.
+- **NGO Matcher**:
+  - Matches user interests (via text or translated voice) to NGO profiles.
+  - Uses **TF‑IDF** vectorization and **cosine similarity** to recommend best-fit NGOs.
+    
 ---
 
 ## Screenshots
 
 ### AI Mentor
-- **User Input (in Hindi)**  
+- **User Input:**  
   ![User input example](images/mentor_input.png)
-- **Bot Response (in Hindi)**  
   ![Bot response example](images/mentor_output.png)
 
 ### NGO Matcher
-- **User Interest (in Spanish)**  
+- **User Interest:**  
   ![Matcher input example](images/matcher_input.png)
-- **Resulting Matches**  
   ![Matcher output example](images/matcher_output.png)
+
+### Home page
 
 ---
 
@@ -57,12 +61,12 @@ python manage.py runserver
    - Mentor: http://localhost:8000/mentor/frontend/
 
 ## Tech Stack 
-### 1. LLMs: OpenAI ChatGPT API
+### 1. LLMs: Gemini API (via Google)
 ### 2. Embeddings: sentence-transformers (MiniLM-L6-v2)
 ### 3. Similarity: scikit-learn (cosine)
 ### 4. Translation: deep-translator, langdetect
 ### 5.Backend: Django + Django REST Framework
-Data: JSON (25+ NGO entries)
+Data: JSON (50 NGO entries)
 
 ## License
 This project is licensed under the MIT License. See LICENSE for details.
