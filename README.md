@@ -64,7 +64,7 @@ python manage.py runserver
 | Translation | deep-translator, langdetect            |
 | Matching    | TF-IDF + Cosine Similarity (`sklearn`) |
 | Embeddings  | Sentence-Transformers: MiniLM-L6-v2    |
-| Data        | NGOs (sample set in `data/`)           |
+| Data        | NGOs (sample set in `matcher/`)        |
 | Frontend    | HTML5 + Inline CSS (Dark Theme)        |
 
 
