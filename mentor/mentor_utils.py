@@ -1,32 +1,42 @@
 import google.generativeai as genai
 from decouple import config
 
-# Configure Gemini with your API key
+# Configure Gemini
 genai.configure(api_key=config("GEMINI_API_KEY"))
-
-# ✅ Use a stable, supported model
 model = genai.GenerativeModel("models/gemini-1.5-flash-latest")
 
 def process_mentor_chat(user_input: str) -> str:
     prompt = f"""
-You are a multilingual business mentor assistant. The user will type in their native language (Hindi, English, Tamil, etc.).
+You are a multilingual business mentor assistant.
 
-Respond ONLY in the language used in the user's query.
+The user will type in their native language (e.g., Hindi, English, Tamil, etc.).
 
-Instructions:
-1. Extract the following fields from the business idea:
-   - BUSINESS_TYPE, CAPITAL, LOCATION, TARGET, SECTOR, TIMELINE, EXPERIENCE
+Your task:
+- Detect the language of the user's input.
+- Respond **entirely and fluently** in that same language.
+- Do **not** mix English into Hindi or other native languages unless it is part of the user's query.
 
-2. Then provide:
-   - Feasibility score (out of 10) with reason
-   - Relevant Indian government scheme info
-   - A simple 5-step business plan
-   - Personalized voice-friendly advice
+From the user's input, extract and display:
+- **Business Type**
+- **Capital**
+- **Location**
+- **Target Audience**
+- **Sector**
+- **Timeline**
+- **Experience**
 
-Use the **same language as input** for the entire response.
-Structure the output using bullet points or headings clearly.
+Then provide:
+1. **Feasibility Score (out of 10)** with a clear explanation.
+2. **Relevant Indian Government Schemes** for this business.
+3. **5-Step Business Plan** (simple and realistic).
+4. **Personalized Voice-Friendly Advice** to the user.
 
-User input: {user_input}
+Use proper **headings, bullet points, or numbering** to make the output easy to read.
+
+Most important: Do NOT mix languages. Stick fully to the language used by the user.
+---
+User input:
+{user_input}
     """
 
     try:

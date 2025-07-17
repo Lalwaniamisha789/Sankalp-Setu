@@ -25,43 +25,60 @@
     {% endif %}
 
     {% if matcher_history %}
-  <div style="margin-top: 50px; padding: 24px; background: #151522; border-radius: 12px; max-width: 900px; margin-left: auto; margin-right: auto;">
-    <h2 style="color: #a259ff; margin-bottom: 20px;">NGO Search History</h2>
-    <ul style="text-align:left; list-style-type: none; padding: 0;">
-    {% for item in matcher_history %}
-      <li style="background: #1e1e2f; color: #fff; padding: 12px 20px; border-radius: 8px; margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: bold;">{{ item.query }}</span>
-          <button class="toggle-results-btn" data-index="{{ forloop.counter0 }}" style="background: #a259ff; border: none; padding: 6px 12px; border-radius: 4px; color: white; cursor: pointer;">
-            Show Results
+    <div style="margin-top: 50px; padding: 24px; background: #151522; border-radius: 12px; max-width: 900px; margin-left: auto; margin-right: auto;">
+        <h2 style="color: #a259ff; margin-bottom: 20px;">NGO Search History</h2>
+        <div style="text-align: right; margin-bottom: 16px;">
+          <button id="toggle-history-btn" style="background: #a259ff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+              Show NGO History
           </button>
+      </div>
+      
+        <div id="ngo-history-section" style="display: none;">
+            <ul style="text-align:left; list-style-type: none; padding: 0;">
+            {% for item in matcher_history %}
+                <li style="background: #1e1e2f; color: #fff; padding: 12px 20px; border-radius: 8px; margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: bold;">{{ item.query }}</span>
+                        <button class="toggle-results-btn" data-index="{{ forloop.counter0 }}" style="background: #a259ff; border: none; padding: 6px 12px; border-radius: 4px; color: white; cursor: pointer;">
+                            Show Results
+                        </button>
+                    </div>
+                    <div id="results-{{ forloop.counter0 }}" style="display: none; margin-top: 12px;"></div>
+                </li>
+            {% endfor %}
+            </ul>
         </div>
-        <div id="results-{{ forloop.counter0 }}" style="display: none; margin-top: 12px;"></div>
-      </li>
-    {% endfor %}
-    </ul>
-  </div>
-{% endif %}
-
-{% if mentor_chats %}
-  <div style="margin-top: 50px; padding: 24px; background: #151522; border-radius: 12px; max-width: 900px; margin-left: auto; margin-right: auto;">
-    <h2 style="color: #a259ff; margin-bottom: 20px;">Mentor Chat History</h2>
-    <ul style="text-align:left; list-style-type: none; padding: 0;">
-      {% for chat in mentor_chats %}
-  <li style="background: #1e1e2f; color: #fff; padding: 12px 20px; border-radius: 8px; margin-bottom: 16px;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div><b>Q:</b> {{ chat.message }}</div>
-      <button class="toggle-mentor-btn" data-index="{{ forloop.counter0 }}" style="background: #a259ff; border: none; padding: 6px 12px; border-radius: 4px; color: white; cursor: pointer;">
-        Show Answer
-      </button>
     </div>
-    <div id="mentor-response-{{ forloop.counter0 }}" style="display: none; margin-top: 12px;"><b>A:</b> {{ chat.response|linebreaks }}</div>
-  </li>
-{% endfor %}
-    </ul>
-  </div>
-{% endif %}
+    {% endif %}
 
+    {% if mentor_chats %}
+    <div style="margin-top: 50px; padding: 24px; background: #151522; border-radius: 12px; max-width: 900px; margin-left: auto; margin-right: auto;">
+        <h2 style="color: #a259ff; margin-bottom: 20px;">Mentor Chat History</h2>
+        <div style="text-align: right; margin-bottom: 16px;">
+          <button id="toggle-mentor-btn" style="background: #a259ff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+              Show Mentor History
+          </button>
+      </div>
+      
+        <div id="mentor-history-section" style="display: none;">
+            <ul style="text-align:left; list-style-type: none; padding: 0;">
+            {% for chat in mentor_chats %}
+                <li style="background: #1e1e2f; color: #fff; padding: 12px 20px; border-radius: 8px; margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div><b>Q:</b> {{ chat.message }}</div>
+                        <button class="toggle-mentor-btn" data-index="{{ forloop.counter0 }}" style="background: #a259ff; border: none; padding: 6px 12px; border-radius: 4px; color: white; cursor: pointer;">
+                            Show Answer
+                        </button>
+                    </div>
+                    <div id="mentor-response-{{ forloop.counter0 }}" style="display: none; margin-top: 12px;"><b>A:</b> {{ chat.response|linebreaks }}</div>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
 
 <script>
   const historyData = {{ matcher_history|safe }};
@@ -99,10 +116,30 @@
         }
       });
     });
-  });
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
+
+    // Toggle full NGO history section
+    const toggleHistoryBtn = document.getElementById('toggle-history-btn');
+    const ngoHistorySection = document.getElementById('ngo-history-section');
+    if (toggleHistoryBtn) {
+      toggleHistoryBtn.addEventListener('click', function () {
+        const isVisible = ngoHistorySection.style.display === 'block';
+        ngoHistorySection.style.display = isVisible ? 'none' : 'block';
+        toggleHistoryBtn.textContent = isVisible ? 'Show NGO History' : 'Hide NGO History';
+      });
+    }
+
+    // Toggle full Mentor history section
+    const toggleMentorBtn = document.getElementById('toggle-mentor-btn');
+    const mentorSection = document.getElementById('mentor-history-section');
+    if (toggleMentorBtn) {
+      toggleMentorBtn.addEventListener('click', function () {
+        const isVisible = mentorSection.style.display === 'block';
+        mentorSection.style.display = isVisible ? 'none' : 'block';
+        toggleMentorBtn.textContent = isVisible ? 'Show Mentor History' : 'Hide Mentor History';
+      });
+    }
+
+    // Per-chat mentor answer toggles
     document.querySelectorAll(".toggle-mentor-btn").forEach(function (btn) {
       btn.addEventListener("click", function () {
         const idx = btn.getAttribute("data-index");
@@ -114,5 +151,4 @@
     });
   });
 </script>
-
 {% endblock %}
