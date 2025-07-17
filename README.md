@@ -24,15 +24,18 @@ Both modules support input/output in any language.
 
 ### AI Mentor
 - **User Input:**  
-  ![User input example](images/mentor_input.png)
-  ![Bot response example](images/mentor_output.png)
+  ![Bot response example](images/MENTOR1)
+  ![Bot response example](images/MENTOR2)
+  ![Bot response example](images/MENTOR3)
 
 ### NGO Matcher
 - **User Interest:**  
   ![Matcher input example](images/matcher_input.png)
-  ![Matcher output example](images/matcher_output.png)
 
 ### Home page
+- ![Bot response example](images/HOME1)
+- ![Bot response example](images/matcher_history.png)
+- ![Bot response example](images/HOME2)
 
 ---
 
