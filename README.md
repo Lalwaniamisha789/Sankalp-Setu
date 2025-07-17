@@ -33,9 +33,9 @@ Both modules support input/output in any language.
   ![Matcher input example](images/matcher_input.png)
 
 ### Home page
-- ![Bot response example](images/HOME1)
-- ![Bot response example](images/matcher_history.png)
-- ![Bot response example](images/HOME2)
+![Bot response example](images/HOME1)
+![Bot response example](images/matcher_history.png)
+![Bot response example](images/HOME2)
 
 ---
 
