@@ -62,11 +62,11 @@ python manage.py runserver
    - Mentor: http://localhost:8000/mentor/frontend/
 
 ## Tech Stack 
-- 1. LLMs: Gemini API (via Google)
-- 2. Embeddings: sentence-transformers (MiniLM-L6-v2)
-- 3. Similarity: scikit-learn (cosine)
-- 4. Translation: deep-translator, langdetect
-- 5.Backend: Django + Django REST Framework
+- LLMs: Gemini API (via Google)
+- Embeddings: sentence-transformers (MiniLM-L6-v2)
+- Similarity: scikit-learn (cosine)
+- Translation: deep-translator, langdetect
+- Backend: Django + Django REST Framework
 Data: JSON (50 NGO entries)
 
 ## License
